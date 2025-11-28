@@ -76,7 +76,6 @@ For detailed step-by-step instructions, see [INSTALLATION.md](INSTALLATION.md)
 - **[Installation Guide](INSTALLATION.md)** - Complete setup walkthrough
 - **[Quick Start Guide](QUICK_START.md)** - Condensed setup for experienced users
 - **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues and solutions
-- **[CLAUDE.md](CLAUDE.md)** - Technical details for AI assistants
 
 ---
 
@@ -87,17 +86,28 @@ For detailed step-by-step instructions, see [INSTALLATION.md](INSTALLATION.md)
 - Python 3.7+ with pip
 - Discord webhook URL (created in Discord server settings)
 - Slack workspace with app permissions (optional)
-- Linux/WSL environment (for systemd service)
+
+---
+
+## Workflow Visualization
+
+<p align="center">
+  <img src="docs/images/image.png" alt="n8n Workflow Diagram" width="700">
+</p>
 
 ---
 
 ## Example Notifications
 
-### Discord (Beacon - Green)
-![Discord Beacon Notification](docs/images/image%201.png)
+### Discord (Beacon - Green |  Session - Red)
+<p align="center">
+  <img src="docs/images/image%201.png" alt="Discord Notification" width="500">
+</p>
 
 ### Slack
-![Slack Notification](docs/images/image%202.png)
+<p align="center">
+  <img src="docs/images/image%202.png" alt="Slack Notification" width="500">
+</p>
 
 **Notification Details:**
 - Color-coded embeds (Red = Session, Green = Beacon)
