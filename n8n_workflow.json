@@ -1,0 +1,182 @@
+{
+  "name": "Sliver C2 Fixed Layout",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sliver-beacon",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "1821514b-b15d-4d98-9608-2bfe6cef3052",
+      "name": "Webhook - Sliver Beacon",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        192
+      ],
+      "webhookId": "sliver-beacon"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "discord_color",
+              "type": "numberValue",
+              "numberValue": "={{ $json.body.type == 'Session' ? 15158332 : 3066993 }}"
+            },
+            {
+              "name": "slack_text",
+              "stringValue": "=🚨 *NEW C2 CONNECTION*\n*Host:* {{ $json.body.hostname }}\n*User:* {{ $json.body.username }}\n*IP:* {{ $json.body.remote_address }}\n*Type:* {{ $json.body.type }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1550cd22-ba27-4812-be7a-7d3771ef4478",
+      "name": "Format Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        0,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "inputMethod": "json",
+              "json": "={{\nJSON.stringify({\n  \"title\": \"🚨 New \" + $json.body.type + \" Connection\",\n  \"color\": parseInt($json.discord_color),\n  \"description\": \"**Target Acquired**\",\n  \"fields\": [\n    {\n      \"name\": \"Hostname\",\n      \"value\": $json.body.hostname,\n      \"inline\": true\n    },\n    {\n      \"name\": \"User\",\n      \"value\": $json.body.username,\n      \"inline\": true\n    },\n    {\n      \"name\": \"Remote IP\",\n      \"value\": $json.body.remote_address,\n      \"inline\": true\n    },\n    {\n      \"name\": \"OS / Arch\",\n      \"value\": $json.body.os + \" (\" + $json.body.arch + \")\",\n      \"inline\": true\n    }\n  ],\n  \"timestamp\": $json.body.timestamp\n})\n}}"
+            }
+          ]
+        }
+      },
+      "id": "dd15b3f9-2dca-43ae-999e-fa9641675329",
+      "name": "Discord Notification",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        400,
+        16
+      ],
+      "webhookId": "89bcf1ab-637c-4ff6-aad6-77b339b43459",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "s2EfxTlE6XNXzEIA",
+          "name": "Discord Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "c2-server",
+          "mode": "name"
+        },
+        "text": "={{ $json.slack_text }}",
+        "otherOptions": {}
+      },
+      "id": "abcd260b-933a-49d9-b954-d80aee800571",
+      "name": "Send a message",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        368
+      ],
+      "webhookId": "491fc4a8-1e3a-43d6-9620-6ba7c7dc7b73",
+      "credentials": {
+        "slackApi": {
+          "id": "2V7dVbhWzytyBn8C",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"success\"\n}",
+        "options": {}
+      },
+      "id": "ae1c5c77-9d8f-4428-aabe-3d820da88fca",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        864,
+        192
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Sliver Beacon": {
+      "main": [
+        [
+          {
+            "node": "Format Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Data": {
+      "main": [
+        [
+          {
+            "node": "Discord Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord Notification": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ab7adcb6-32b6-4000-b084-989da2cc5359",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3d65e600a9aeb19d6f05ce03e45f574014956a91db8dd7174a8b9335554e5aa3"
+  },
+  "id": "mC2tEf3azuitx6C9",
+  "tags": []
+}

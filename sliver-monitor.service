@@ -1,0 +1,24 @@
+[Unit]
+Description=Sliver Beacon Monitor
+After=network.target sliver.service
+Wants=sliver.service
+
+[Service]
+Type=simple
+User=kali
+
+# IMPORTANT: Replace the path below with the output of 'which python3'
+# Examples:
+#   - /usr/bin/python3
+#   - /home/kali/n8n/venv/bin/python
+#   - /home/yourusername/.pyenv/shims/python3
+ExecStart=/home/kali/n8n/venv/bin/python  /home/kali/n8n/sliver_beacon_monitor.py
+
+# Optional: Set the working directory to where your script is (helps with relative paths)
+WorkingDirectory=/home/kali/n8n
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=sliver.service
