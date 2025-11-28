@@ -348,7 +348,7 @@ The complete n8n workflow JSON is provided below. This workflow:
 
 ### 5.2 n8n Workflow JSON
 
-![image.png](image.png)
+<img src="docs/images/image%201.png" alt="Discord Notification" width="500">
 
 ```json
 {
