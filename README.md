@@ -91,7 +91,7 @@ For detailed step-by-step instructions, see [INSTALLATION.md](INSTALLATION.md)
 
 ## Workflow Visualization
 
-<p align="center">
+<p align="left">
   <img src="docs/images/image.png" alt="n8n Workflow Diagram" width="700">
 </p>
 
