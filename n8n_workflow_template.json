@@ -1,0 +1,190 @@
+{
+  "_comment": "TEMPLATE VERSION - Replace credential IDs after importing to n8n",
+  "_setup_instructions": [
+    "1. Import this workflow into n8n",
+    "2. Click the Discord Notification node and add your Discord webhook credential",
+    "3. Click the Slack node and add your Slack API credential (optional)",
+    "4. Activate the workflow",
+    "5. Your webhook will be available at: http://localhost:5678/webhook/sliver-beacon"
+  ],
+  "name": "Sliver C2 Notification Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sliver-beacon",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node-sliver-beacon",
+      "name": "Webhook - Sliver Beacon",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        192
+      ],
+      "webhookId": "sliver-beacon"
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "discord_color",
+              "type": "numberValue",
+              "numberValue": "={{ $json.body.type == 'Session' ? 15158332 : 3066993 }}"
+            },
+            {
+              "name": "slack_text",
+              "stringValue": "=🚨 *NEW C2 CONNECTION*\n*Host:* {{ $json.body.hostname }}\n*User:* {{ $json.body.username }}\n*IP:* {{ $json.body.remote_address }}\n*Type:* {{ $json.body.type }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "format-data-node",
+      "name": "Format Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.2,
+      "position": [
+        0,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "options": {},
+        "embeds": {
+          "values": [
+            {
+              "inputMethod": "json",
+              "json": "={{\nJSON.stringify({\n  \"title\": \"🚨 New \" + $json.body.type + \" Connection\",\n  \"color\": parseInt($json.discord_color),\n  \"description\": \"**Target Acquired**\",\n  \"fields\": [\n    {\n      \"name\": \"Hostname\",\n      \"value\": $json.body.hostname,\n      \"inline\": true\n    },\n    {\n      \"name\": \"User\",\n      \"value\": $json.body.username,\n      \"inline\": true\n    },\n    {\n      \"name\": \"Remote IP\",\n      \"value\": $json.body.remote_address,\n      \"inline\": true\n    },\n    {\n      \"name\": \"OS / Arch\",\n      \"value\": $json.body.os + \" (\" + $json.body.arch + \")\",\n      \"inline\": true\n    }\n  ],\n  \"timestamp\": $json.body.timestamp\n})\n}}"
+            }
+          ]
+        }
+      },
+      "id": "discord-notification-node",
+      "name": "Discord Notification",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        400,
+        16
+      ],
+      "webhookId": "discord-webhook-placeholder",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "YOUR_DISCORD_CREDENTIAL_ID",
+          "name": "Discord Webhook account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "c2-server",
+          "mode": "name"
+        },
+        "text": "={{ $json.slack_text }}",
+        "otherOptions": {}
+      },
+      "id": "slack-message-node",
+      "name": "Send a message",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        368
+      ],
+      "webhookId": "slack-webhook-placeholder",
+      "credentials": {
+        "slackApi": {
+          "id": "YOUR_SLACK_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"success\"\n}",
+        "options": {}
+      },
+      "id": "webhook-response-node",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        864,
+        192
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Sliver Beacon": {
+      "main": [
+        [
+          {
+            "node": "Format Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Data": {
+      "main": [
+        [
+          {
+            "node": "Discord Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord Notification": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "template-version-1.0",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "REPLACE_WITH_YOUR_N8N_INSTANCE_ID"
+  },
+  "id": "sliver-c2-workflow-template",
+  "tags": []
+}

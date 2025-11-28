@@ -70,9 +70,17 @@ n8n will be accessible at `http://localhost:5678`
 
 ## Step 2: Install Python Dependencies
 
-The monitoring script requires the Sliver Python client library.
+The monitoring script requires the Sliver Python client library and requests.
 
 ```bash
+pip install sliver-py requests
+```
+
+Or if you have external dependencies issues, you can use a virtual environment in Python:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
 pip install sliver-py requests
 ```
 
@@ -89,10 +97,7 @@ This script connects to your Sliver server and monitors for new beacon/session c
 cd /home/kali/n8n/  # or your preferred location
 
 # Download the script
-wget https://raw.githubusercontent.com/yourusername/repo/main/sliver_beacon_monitor.py
-
-# Or copy from the repository
-cp /path/to/repo/sliver_beacon_monitor.py .
+wget https://raw.githubusercontent.com/0x0Trace/n8n-Sliver-C2-implant/main/sliver_beacon_monitor.py
 ```
 
 ### 3.2 Configuration Variables to Update
@@ -129,9 +134,6 @@ You should see:
 [*] Monitoring for new connections...
 ```
 
-Press `Ctrl+C` to stop the test run. We'll set it up as a service next.
-
----
 
 ## Step 4: Create Systemd Service
 
@@ -150,10 +152,10 @@ Copy the output (e.g., `/home/kali/n8n/venv/bin/python` or `/usr/bin/python3`)
 ```bash
 # Download the service file
 sudo wget -O /etc/systemd/system/sliver-monitor.service \
-  https://raw.githubusercontent.com/yourusername/repo/main/sliver-monitor.service
+  https://raw.githubusercontent.com/0x0Trace/n8n-Sliver-C2-implant/main/sliver-monitor.service
 
 # Or copy from repository
-sudo cp /path/to/repo/sliver-monitor.service /etc/systemd/system/
+sudo cp sliver-monitor.service /etc/systemd/system/
 ```
 
 ### 4.3 Edit the service file
@@ -218,10 +220,12 @@ Open your browser and navigate to `http://localhost:5678`
 1. Click **Workflows** in the left sidebar
 2. Click **Add workflow** → **Import from File**
 3. Click **"Select file to import"**
-4. Navigate to the repository and select `n8n_workflow.json`
+4. Navigate to the repository and select `n8n_workflow_template.json`
 5. Click **Import**
 
-Alternatively, you can copy the JSON content from `n8n_workflow.json` and paste it directly.
+Alternatively, you can copy the JSON content from `n8n_workflow_template.json` and paste it directly.
+
+**Note:** After importing, you'll need to configure your Discord and Slack credentials (the template uses placeholders).
 
 ### 5.3 Workflow Visual Overview
 

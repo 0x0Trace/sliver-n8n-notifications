@@ -2,6 +2,13 @@
 CLAUDE.md
 .claude/
 
+# Personal n8n workflow with credentials (DO NOT COMMIT)
+n8n_workflow.json
+*_with_credentials.json
+
+# Only commit the sanitized template
+!n8n_workflow_template.json
+
 # Python
 __pycache__/
 *.py[cod]
@@ -21,6 +28,21 @@ beacon_state.json
 *.cfg
 *.key
 *.pem
+
+# Sliver client configurations (contains server certs/keys)
+sliver-client/
+*.sliver
+
+# n8n data and backups
+.n8n/
+*.backup.json
+*.db
+*.sqlite
+*.sqlite3
+
+# Service account keys
+*service-account*.json
+credentials*.json
 
 # IDE
 .vscode/
