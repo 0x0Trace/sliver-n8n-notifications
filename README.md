@@ -59,7 +59,7 @@ For experienced users who already have Sliver and Python configured:
    ```
 
 4. **Import n8n workflow:**
-   - Copy [`n8n_workflow.json`](n8n_workflow.json)
+   - Copy [`n8n_workflow_template.json`](n8n_workflow_template.json)
    - Import in n8n UI: Workflows → Import from File
    - Configure Discord/Slack credentials
 
