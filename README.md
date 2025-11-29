@@ -54,7 +54,7 @@ For experienced users who already have Sliver and Python configured:
 
 3. **Deploy the monitor script:**
    ```bash
-   wget https://raw.githubusercontent.com/0x0Trace/n8n-Sliver-C2-implant/main/sliver_beacon_monitor.py
+   wget https://raw.githubusercontent.com/0x0Trace/sliver-n8n-notifications/main/sliver_beacon_monitor.py
    chmod +x sliver_beacon_monitor.py
    ```
 
